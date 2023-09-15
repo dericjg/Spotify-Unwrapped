@@ -1,17 +1,19 @@
-let links = document.querySelectorAll("i");
-for (let i = 0; i < links.length; i++){
-  links[i].addEventListener("click", (e)=>{
+const appContainer = document.querySelector(".app-container")
+
+//let event delegation detect link clicks
+appContainer.addEventListener('click', (e)=>{
+  if (e.target.tagName === "I"){
     let type = e.target.getAttribute("data-type") === "artist" ? "artist" : "track"
     
-    window.location.href = `http://open.spotify.com/${type}/` + e.target.getAttribute("data-link");
-  })
-}
+    window.location.href = `http://open.spotify.com/${type}/${e.target.getAttribute("data-link")}`
+  }
+})
 
-let appTabContainer = document.getElementById("page-tab-container")
-let timeTabContainer = document.getElementById("time-tab-container")
+const appTabContainer = document.getElementById("page-tab-container")
+const timeTabContainer = document.getElementById("time-tab-container")
 
-let artistPage= document.getElementById("artist-app")
-let trackPage = document.getElementById("tracks-app")
+const artistPage= document.getElementById("artist-app")
+const trackPage = document.getElementById("tracks-app")
 
 
 let currentPage = "artists"
@@ -24,9 +26,11 @@ function setCurrentPage(page){
 function setCurrentTime(time){
   currentTime = time
 }
-
+//render() is responsible for checking
+//the app state and updating the UI
+//to reflect the state
 function render(){
-  let page = currentPage == "artists" ? artistPage : trackPage
+  const page = currentPage == "artists" ? artistPage : trackPage
 
   for (let p of page.children){
     p.classList.remove("active")
@@ -51,6 +55,7 @@ function render(){
   }
 }
 
+//changes the top content (tracks vs artists)
 appTabContainer.addEventListener('click', (e)=>{
   if (e.target.tagName === "BUTTON"){
     for (let button of appTabContainer.children){
@@ -63,7 +68,7 @@ appTabContainer.addEventListener('click', (e)=>{
     render()
   }
 })
-
+//changes the time frame of the top items
 timeTabContainer.addEventListener('click', (e)=>{
   if (e.target.tagName === "BUTTON"){
     for (let button of timeTabContainer.children){

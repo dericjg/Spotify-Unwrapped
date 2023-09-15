@@ -43,8 +43,11 @@ app.get("/login", (req, res) => {
   }));
 })
 
+//this is an unecessary redirect route. 
+//used for testing but hasnt been removed
 app.get("/dashboard", (req, res) => {
   auth_code = req.query.code
+  //retrieve authToken from auth code
   get_AuthToken(auth_code).then((data) => {
      token = data
     res.redirect("/home")
@@ -63,6 +66,7 @@ app.listen(port, () => {
 
 async function get_AuthToken(Code) {
   return new Promise((resolve, reject) => {
+    //deprecated package. used for testing, hasnt been removed
     request({
       url: "https://accounts.spotify.com/api/token",
       method: "POST",
@@ -70,56 +74,33 @@ async function get_AuthToken(Code) {
       form: { grant_type: "authorization_code", code: Code, redirect_uri: redirect_uri },
       json: true
     }, (err, res, body) => {
-      if (res.status === 200){
         resolve(body.access_token)
-      }else{
-        reject("Error with fetch")
-      }
     })
   })
 }
 
 async function getTop() {
   return new Promise(async (resolve, reject) => {
-    let options = {
+    const options = {
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token
       }
     }
 
-    let short, medium, long, artist, song = null;
-    let limit = 20
-    let data = { artists: {}, tracks: {} }
+  
+    const types = ['artists', 'tracks']
+    const times = ['short', 'medium', 'long']
+    const limit = 20
+    const data = {artists: {}, tracks: {}}
 
-    artist = await fetch(`http://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=${limit}`, options)
-    short = await artist.json()
-    data.artists.short = short
-
-    artist = await fetch(`http://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=${limit}`, options)
-    medium = await artist.json()
-    data.artists.medium = medium
-
-    artist = await fetch(`http://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=${limit}`, options)
-    long = await artist.json()
-    data.artists.long = long
-
-    song = await fetch(`http://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=${limit}`, options)
-    short = await song.json()
-    data.tracks.short = short
-
-    song = await fetch(`http://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=${limit}`, options)
-    medium = await song.json()
-    data.tracks.medium = medium
-
-    song = await fetch(`http://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=${limit}`, options)
-    long = await song.json()
-    data.tracks.long = long
-
-    if (data.items().length > 0){
-      resolve(data)
-    }else{
-      reject("Error fetching top tracks and artists")
+    for (let type of types){
+      for (let time of times){
+        let api_data = await fetch(`http://api.spotify.com/v1/me/top/${type}?time_range=${time}_term&limit=${limit}`, options)
+        data[type][time] = await api_data.json()
+      }
     }
+   console.log(data)
+   resolve(data)
   })
 }
