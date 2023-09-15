@@ -1,0 +1,91 @@
+{% extends "base-app.html"%}
+
+{% block body %}
+  
+  <div class="app-container">
+    <div class="tab-container" id="page-tab-container">
+      <button class="app-tab active" data-id="artists" id="artists-button">Artists</button>
+      <button class="app-tab" data-id="tracks" id="tracks-button">Tracks</button>
+    </div>
+    
+     <div class="tab-container" id="time-tab-container">
+        <button class="tab active" id="short-button" data-id="short">
+          4 Weeks
+        </button>
+       <button class="tab" id="medium-button" data-id="medium">
+         6 Months
+       </button>
+       <button class="tab" id="long-button" data-id="long">
+         All-Time
+       </button>
+     </div>
+
+    
+    <div class="container-wrapper active" id="artist-app" data-id="artists">
+     <div class="content-container active" data-id="short">
+       {% macro itemize(position, name, id, img) %}
+         <div class="item artist-item">
+         <span>{{position}}</span>
+           <div>
+             <img src={{img}} />
+      <p> {{name}}</p>
+              <i class="fa-brands fa-spotify fa-sm fa-" style="color: #08ca00;" data-type="artist" data-link={{id}}></i>
+           </div>
+       </div>
+       {% endmacro %}
+       
+          {% for item in items.artists.short.items %}
+             {{itemize(loop.index, item.name, item.id, item.images[0].url)}}
+          {% endfor %}
+      
+     </div>
+    <div class="content-container" data-id="medium">
+          {% for item in items.artists.medium.items %}
+        {{itemize(loop.index, item.name, item.id, item.images[0].url)}}
+          {% endfor %}
+     </div>
+    <div class="content-container" data-id="long">
+          {% for item in items.artists.long.items %}
+        {{itemize(loop.index, item.name, item.id, item.images[0].url)}}
+          {% endfor %}
+     </div>
+  </div> 
+  
+    <div class="container-wrapper" id="tracks-app" data-id="tracks">
+       <div class="content-container" data-id="short">
+       {% macro itemize(position, name, id, img) %}
+         <div class="item track-item">
+         <span>{{position}}</span>
+           <div>
+             <img src={{img}} />
+       <p>{{name}}</p>
+          <i class="fa-brands fa-spotify fa-sm fa-" style="color: #08ca00;" data-type="track" data-link={{id}}></i>
+           </div>
+       </div>
+       {% endmacro %}
+       
+          {% for item in items.tracks.short.items %}
+             {{itemize(loop.index, item.name, item.id, item.album.images[0].url)}}
+          {% endfor %}
+      
+     </div>
+    <div class="content-container" data-id="medium">
+          {% for item in items.tracks.medium.items %}
+        {{itemize(loop.index, item.name, item.id, item.album.images[0].url)}}
+          {% endfor %}
+     </div>
+    <div class="content-container" data-id="long">
+          {% for item in items.tracks.long.items %}
+        {{itemize(loop.index, item.name, item.id, item.album.images[0].url)}}
+          {% endfor %}
+     </div>
+  </div> 
+    </div>
+    
+  </div>  
+
+{% endblock %}
+
+{% block script %}
+    "app.js"
+{% endblock %}

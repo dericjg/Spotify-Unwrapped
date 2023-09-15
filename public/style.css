@@ -1,0 +1,151 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+ i{
+ position: absolute;
+ left: 69vw;
+ margin-left: 3vw;
+ }
+*{
+  padding: 0;
+  margin: 0;
+}
+
+body{
+  background: rgb(29,185,84);
+  background: linear-gradient(149deg, rgba(29,185,84,1) 12%, rgba(80,179,160,1) 76%);
+}
+
+img {
+  width: 11vw;
+  height: 11vw;
+  margin-right: 2vw;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+  position: relative;
+  right: 2vw;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  margin: auto 0px;
+}
+
+.content-container >h1{
+  color: black;
+  font-size: 10vw;
+  
+}
+.tab-container{
+  display: flex;
+  justify-content: center;
+}
+
+.tab-container > button{
+  position: relative;
+  top: 6vw;
+  padding: 4px 8px;
+  margin: 1vw;
+  width: 30vw;
+  height: 10vw;
+  color: white;
+  background-color: black;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.app-tab{
+  top: 0;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border: none;
+  font-weight: 600;
+  max-width: 50%;
+  height: 10vw;
+  border-radius: 20px;
+  box-shadow: 0px 2px 3px black;
+  font-size: 3vw;
+  padding: 4vw 5vw;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+
+
+button:hover{
+  background-color: white;
+  color: black;
+}
+.item > div{
+  display: flex;
+  justify-content: flex-start;
+  font-size: 5vw;
+  align-items: center;
+  position: relative;
+  left: 5vw;
+}
+
+span{
+  position: relative;
+  font-size: 7vw;
+  font-weight: 500;
+  left: -2vw;
+  
+}
+
+.item{
+  display: flex;
+  justify-content: flex-start;
+  width: 80vw;
+  align-items: center;
+  margin-bottom: 3vh;
+  position: relative;
+}
+
+p{
+  max-width: 80%;
+}
+
+.content-container{
+  font-family: 'Helvetica', sans-serif;
+  background-color:white;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10vw;
+  border-radius: 20px;
+}
+
+#app-container{
+  position: relative;
+  top: 10vw;
+}
+
+.content-container .item:nth-child(n+10){
+  right: 4vw;
+}
+
+.content-container.active{
+  display: flex;
+}
+
+.content-wrapper.active{
+  display: block;
+}
+.content-wrapper{
+  display: none;
+}
+
+
+button.active{
+  background-color: white;
+  color: black;
+}
