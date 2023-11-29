@@ -47,17 +47,22 @@ app.get("/login", (req, res) => {
 //used for testing but hasnt been removed
 app.get("/dashboard", (req, res) => {
   auth_code = req.query.code
+  console.log("auth code: " + req.query.code)
   //retrieve authToken from auth code
   get_AuthToken(auth_code).then((data) => {
+    console.log("token data: " + data)
      token = data
     res.redirect("/home")
-    }).catch((error)=>res.send(error))
+    }).catch((error)=>console.log(error))
 })
 
 app.get('/home', (req, res) => {
-  getTop().then((data)=>{
+  console.log("routing to home")
+  getTop(token).then((data)=>{
+    console.log("data: ")
+    console.log(data)
     res.render("top-items.html", { items: data})
-  }).catch((error)=> res.send(error))
+  }).catch((error)=> console.log(error) )
 })
 
 app.listen(port, () => {
@@ -65,22 +70,39 @@ app.listen(port, () => {
 })
 
 async function get_AuthToken(Code) {
-  return new Promise((resolve, reject) => {
-    //deprecated package. used for testing, hasnt been removed
-    request({
-      url: "https://accounts.spotify.com/api/token",
+  return new Promise(async(resolve, reject) => {
+    const headers = {
+      'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
+    }
+    
+    const formData = new FormData()
+    formData.append('grant_type', 'authorization_code')
+    formData.append('code', Code)
+    formData.append('redirect_uri', redirect_uri)
+    const form = new URLSearchParams(formData)
+    const options = {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
-      form: { grant_type: "authorization_code", code: Code, redirect_uri: redirect_uri },
-      json: true
-    }, (err, res, body) => {
-        resolve(body.access_token)
-    })
+      headers: headers,
+      body: form,
+    }
+    
+   const result = await fetch('https://accounts.spotify.com/api/token', options)
+    if (result.status == 200){
+      let data = await result.json()
+      resolve(data.access_token)
+    }
+    else{
+      console.log("error: " + result.status)
+      reject("Error")
+    }
   })
 }
 
-async function getTop() {
+async function getTop(token) {
   return new Promise(async (resolve, reject) => {
+    if (!token){
+      console.log("token undefined")
+    }
     const options = {
       headers: {
         'Accept': 'application/json',
@@ -100,7 +122,6 @@ async function getTop() {
         data[type][time] = await api_data.json()
       }
     }
-   console.log(data)
    resolve(data)
   })
 }
